@@ -5,6 +5,8 @@ using UnityEngine;
 public class RocketBehaviour : MonoBehaviour {
 
     public float thrust;
+    public float maxSpeed;
+
     public Rigidbody2D rb;
     public float midPoint;
     public Transform upDir;
@@ -28,7 +30,11 @@ public class RocketBehaviour : MonoBehaviour {
                 rb.transform.eulerAngles += Vector3.forward * 2;
             }
         }
-        rb.AddForce((upDir.position - transform.position).normalized * thrust);
+
+        if (rb.velocity.magnitude < maxSpeed)
+        {
+            rb.AddForce((upDir.position - transform.position).normalized * thrust);
+        }
     }
 }
 
