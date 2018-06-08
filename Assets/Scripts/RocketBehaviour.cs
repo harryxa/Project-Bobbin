@@ -31,10 +31,10 @@ public class RocketBehaviour : MonoBehaviour {
             }
         }
 
-        if (rb.velocity.magnitude < maxSpeed)
-        {
+        //if (rb.velocity.magnitude < maxSpeed)
+        //{
             rb.AddForce((upDir.position - transform.position).normalized * thrust);
-        }
+        //}
     }
 }
 

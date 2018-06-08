@@ -2,51 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attractor : MonoBehaviour
+public class Gravity : MonoBehaviour
 {
 
     const float G = 667.4f;
 
-    public static List<Attractor> Attractors;
+    //public static List<Attractor> Attractors;
 
-    public Rigidbody rb;
+    public Rigidbody2D rb;
 
     void FixedUpdate()
     {
-        foreach (Attractor attractor in Attractors)
+        GameObject[] celestialBodys = GameObject.FindGameObjectsWithTag("CelestialBody");
+        foreach (GameObject celestialBody in celestialBodys)
         {
-            if (attractor != this)
-                Attract(attractor);
+            Attract(celestialBody);
         }
+
+
+
+
+        //foreach (Attractor attractor in Attractors)
+        //{
+        //    if (attractor != this)
+        //        Attract(attractor);
+        //}
     }
 
-    void OnEnable()
+    //void OnEnable()
+    //{
+    //    if (Attractors == null)
+    //        Attractors = new List<Attractor>();
+
+    //    Attractors.Add(this);
+    //}
+
+    //void OnDisable()
+    //{
+    //    Attractors.Remove(this);
+    //}
+
+    void Attract(GameObject objToAttract)
     {
-        if (Attractors == null)
-            Attractors = new List<Attractor>();
+        //Rigidbody2D rbToAttract = objToAttract.GetComponent<Rigidbody2D>();
 
-        Attractors.Add(this);
-    }
-
-    void OnDisable()
-    {
-        Attractors.Remove(this);
-    }
-
-    void Attract(Attractor objToAttract)
-    {
-        Rigidbody rbToAttract = objToAttract.rb;
-
-        Vector3 direction = rb.position - rbToAttract.position;
+        Vector2 direction = transform.position - objToAttract.transform.position;
         float distance = direction.magnitude;
 
         if (distance == 0f)
             return;
 
-        float forceMagnitude = G * (rb.mass * rbToAttract.mass) / Mathf.Pow(distance, 2);
-        Vector3 force = direction.normalized * forceMagnitude;
+        //10 is a hardcoded mass for the celestial body atm
+        float forceMagnitude = G * (rb.mass * 1f) / Mathf.Pow(distance, 2);
+        Vector2 force = direction.normalized * forceMagnitude;
 
-        rbToAttract.AddForce(force);
+        rb.AddForce(-force);
     }
 
 }
