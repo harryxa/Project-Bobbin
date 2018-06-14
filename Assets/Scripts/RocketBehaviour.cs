@@ -2,39 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketBehaviour : MonoBehaviour {
+public class RocketBehaviour : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    private Gravity gravity;
+    public Transform upDir;
 
     public float thrust;
     public float maxSpeed;
+    public float speed;
 
-    public Rigidbody2D rb;
-    public float midPoint;
-    public Transform upDir;
+    private Vector2 shipMoveVector;
+    private float halfScreenWidth;
 
-    // Use this for initialization
-    void Start () {
-        midPoint = Screen.width / 2;
+    void Start ()
+    {
+        halfScreenWidth = Screen.width / 2;
         rb = GetComponent<Rigidbody2D>();
+        gravity = GetComponent<Gravity>();
     }
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        shipMoveVector = (upDir.position - transform.position).normalized * thrust;
+        speed = rb.velocity.magnitude;
+
+        TurnShip();
+        Vector2 shipPos = new Vector2(transform.position.x, transform.position.y);
+        //if (speed < maxSpeed)
+        //{
+            //rb.AddForce(gravity.force);
+           // rb.AddForce(shipMoveVector);
+        Debug.DrawLine(transform.position, gravity.force + shipPos, Color.cyan);
+        Debug.DrawLine(transform.position, shipMoveVector + shipPos, Color.red);
+
+        //}       
+    }
+
+    private void TurnShip()
+    {
         if (Input.GetAxis("Fire1") > 0f)
         {
-            if (Input.mousePosition.x < midPoint)
+            if (Input.mousePosition.x < halfScreenWidth)
             {
                 rb.transform.eulerAngles -= Vector3.forward * 2;
             }
-            else if (Input.mousePosition.x >= midPoint)
+            else if (Input.mousePosition.x >= halfScreenWidth)
             {
                 rb.transform.eulerAngles += Vector3.forward * 2;
             }
         }
-
-        //if (rb.velocity.magnitude < maxSpeed)
-        //{
-            rb.AddForce((upDir.position - transform.position).normalized * thrust);
-        //}
     }
 }
 

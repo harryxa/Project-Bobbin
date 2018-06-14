@@ -6,7 +6,7 @@ public class Gravity : MonoBehaviour
 {
 
     const float G = 667.4f;
-
+    public Vector2 force;
     //public static List<Attractor> Attractors;
 
     public Rigidbody2D rb;
@@ -18,10 +18,6 @@ public class Gravity : MonoBehaviour
         {
             Attract(celestialBody);
         }
-
-
-
-
         //foreach (Attractor attractor in Attractors)
         //{
         //    if (attractor != this)
@@ -52,11 +48,11 @@ public class Gravity : MonoBehaviour
         if (distance == 0f)
             return;
 
-        //10 is a hardcoded mass for the celestial body atm
+        //5 is a hardcoded mass for the celestial body atm
         float forceMagnitude = G * (rb.mass * 1f) / Mathf.Pow(distance, 2);
-        Vector2 force = direction.normalized * forceMagnitude;
+        force = direction.normalized * forceMagnitude * -1f;
 
-        rb.AddForce(-force);
+        //rb.AddForce(force);
     }
 
 }
