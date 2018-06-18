@@ -12,7 +12,7 @@ public class RocketBehaviour : MonoBehaviour
     public float maxSpeed;
     public float speed;
 
-    private Vector2 shipMoveVector;
+    private Vector2 shipAccelerationVector;
     private float halfScreenWidth;
 
     void Start ()
@@ -24,17 +24,20 @@ public class RocketBehaviour : MonoBehaviour
 	
 	void Update ()
     {
-        shipMoveVector = (upDir.position - transform.position).normalized * thrust;
+        shipAccelerationVector = (upDir.position - transform.position).normalized * thrust;
         speed = rb.velocity.magnitude;
 
         TurnShip();
         Vector2 shipPos = new Vector2(transform.position.x, transform.position.y);
         
-        rb.AddForce(shipMoveVector);
+        rb.AddForce(shipAccelerationVector);
         
-        Debug.DrawLine(transform.position, shipMoveVector + shipPos, Color.red);
+        Debug.DrawLine(transform.position, shipAccelerationVector + shipPos, Color.red);
+        Debug.DrawLine(transform.position, gravity.allGravityVectors + shipPos, Color.blue);
+        Debug.DrawLine(transform.position, rb.velocity + shipPos, Color.green);
 
-               
+
+
     }
 
     private void TurnShip()
@@ -65,9 +68,17 @@ public class RocketBehaviour : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            thrust = 2f;
+            thrust = 5f;
         }
 
+    }
+
+    public void MaintainSpeed()
+    {
+        if (speed >= maxSpeed)
+        {
+
+        }
     }
 }
 

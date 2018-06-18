@@ -5,8 +5,10 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
 
-    const float G = 66.74f;
+    const float G = 667.4f;
     public Vector2 force;
+    public Vector2 allGravityVectors;
+    public Vector2 temp;
     
     //public static List<GameObject> Celestialbodys;
 
@@ -20,11 +22,13 @@ public class Gravity : MonoBehaviour
     {
         GameObject[] celestialBodys = GameObject.FindGameObjectsWithTag("CelestialBody");
         shipPos = new Vector2(transform.position.x, transform.position.y);
-
+        temp = Vector2.zero;
         foreach (GameObject celestialBody in celestialBodys)
         {
             Attract(celestialBody);
+            temp += force;
         }
+        allGravityVectors = temp;
     }
 
 
@@ -42,18 +46,18 @@ public class Gravity : MonoBehaviour
         float mass = 2f;
         float forceMagnitude = G * (rb.mass * mass) / Mathf.Pow(distance, 2);
 
-        if (forceMagnitude > 10f)
+        if (forceMagnitude > 20f)
         {
-            forceMagnitude = 10f;
+            forceMagnitude = 20f;
         }
 
         force = direction.normalized * forceMagnitude * -1f;
         rb.AddForce(force);
         Debug.DrawLine(transform.position, force + shipPos, Color.cyan);
-        if (forceMagnitude > 9f)
-        {
-            Debug.Log(forceMagnitude);
-        }
+        //if (forceMagnitude > 9f)
+        //{
+        //    Debug.Log(forceMagnitude);
+        //}
            
     }
 
