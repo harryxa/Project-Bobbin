@@ -11,7 +11,6 @@ public class RocketBehaviour : MonoBehaviour
     public float thrust;
     public float maxSpeed;
     public float speed;
-    private Vector2 counterForce;
 
     private Vector2 shipAccelerationVector;
     private float halfScreenWidth;
@@ -28,23 +27,22 @@ public class RocketBehaviour : MonoBehaviour
         shipAccelerationVector = (upDir.position - transform.position).normalized * thrust;
         speed = rb.velocity.magnitude;
 
-        TurnShip();
+        ShipControls();
         Vector2 shipPos = new Vector2(transform.position.x, transform.position.y);
         
         rb.AddForce(shipAccelerationVector);
         
-        //Debug.DrawLine(transform.position, shipAccelerationVector + shipPos, Color.red);
-        //Debug.DrawLine(transform.position, gravity.allGravityVectors + shipPos, Color.blue);
+        Debug.DrawLine(transform.position, shipAccelerationVector + shipPos, Color.red);
+        Debug.DrawLine(transform.position, gravity.allGravityVectors + shipPos, Color.blue);
         Debug.DrawLine(transform.position, rb.velocity + shipPos, Color.green);
-        Debug.DrawLine(transform.position, counterForce + shipPos, Color.red);
 
-        //MaintainSpeed();
+        LimitSpeed();
 
 
 
     }
 
-    private void TurnShip()
+    private void ShipControls()
     {
         if (Input.GetAxis("Fire1") > 0f)
         {
@@ -77,15 +75,11 @@ public class RocketBehaviour : MonoBehaviour
 
     }
 
-    public void MaintainSpeed()
+    public void LimitSpeed()
     {
         if (speed >= maxSpeed)
         {
-            counterForce = -rb.velocity;
-            counterForce.Normalize();
-            counterForce = counterForce * (speed - maxSpeed) * 20;
-
-            rb.AddForce(counterForce);
+            rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
 }
