@@ -11,6 +11,7 @@ public class RocketBehaviour : MonoBehaviour
     public float thrust;
     public float maxSpeed;
     public float speed;
+    private Vector2 counterForce;
 
     private Vector2 shipAccelerationVector;
     private float halfScreenWidth;
@@ -32,9 +33,12 @@ public class RocketBehaviour : MonoBehaviour
         
         rb.AddForce(shipAccelerationVector);
         
-        Debug.DrawLine(transform.position, shipAccelerationVector + shipPos, Color.red);
-        Debug.DrawLine(transform.position, gravity.allGravityVectors + shipPos, Color.blue);
+        //Debug.DrawLine(transform.position, shipAccelerationVector + shipPos, Color.red);
+        //Debug.DrawLine(transform.position, gravity.allGravityVectors + shipPos, Color.blue);
         Debug.DrawLine(transform.position, rb.velocity + shipPos, Color.green);
+        Debug.DrawLine(transform.position, counterForce + shipPos, Color.red);
+
+        //MaintainSpeed();
 
 
 
@@ -77,7 +81,11 @@ public class RocketBehaviour : MonoBehaviour
     {
         if (speed >= maxSpeed)
         {
+            counterForce = -rb.velocity;
+            counterForce.Normalize();
+            counterForce = counterForce * (speed - maxSpeed) * 20;
 
+            rb.AddForce(counterForce);
         }
     }
 }
