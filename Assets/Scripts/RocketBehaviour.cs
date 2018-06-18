@@ -29,14 +29,12 @@ public class RocketBehaviour : MonoBehaviour
 
         TurnShip();
         Vector2 shipPos = new Vector2(transform.position.x, transform.position.y);
-        //if (speed < maxSpeed)
-        //{
-            //rb.AddForce(gravity.force);
-           // rb.AddForce(shipMoveVector);
-        Debug.DrawLine(transform.position, gravity.force + shipPos, Color.cyan);
+        
+        rb.AddForce(shipMoveVector);
+        
         Debug.DrawLine(transform.position, shipMoveVector + shipPos, Color.red);
 
-        //}       
+               
     }
 
     private void TurnShip()
@@ -52,6 +50,24 @@ public class RocketBehaviour : MonoBehaviour
                 rb.transform.eulerAngles += Vector3.forward * 2;
             }
         }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            rb.transform.eulerAngles -= Vector3.forward * 5;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            rb.transform.eulerAngles += Vector3.forward * 5;
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            thrust += 1 * Time.deltaTime;
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            thrust = 2f;
+        }
+
     }
 }
 

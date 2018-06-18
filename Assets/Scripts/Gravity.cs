@@ -5,38 +5,29 @@ using UnityEngine;
 public class Gravity : MonoBehaviour
 {
 
-    const float G = 667.4f;
+    const float G = 66.74f;
     public Vector2 force;
-    //public static List<Attractor> Attractors;
+    
+    //public static List<GameObject> Celestialbodys;
 
     public Rigidbody2D rb;
+    Vector2 shipPos;
 
+    private void Start()
+    {
+    }
     void FixedUpdate()
     {
         GameObject[] celestialBodys = GameObject.FindGameObjectsWithTag("CelestialBody");
+        shipPos = new Vector2(transform.position.x, transform.position.y);
+
         foreach (GameObject celestialBody in celestialBodys)
         {
             Attract(celestialBody);
         }
-        //foreach (Attractor attractor in Attractors)
-        //{
-        //    if (attractor != this)
-        //        Attract(attractor);
-        //}
     }
 
-    //void OnEnable()
-    //{
-    //    if (Attractors == null)
-    //        Attractors = new List<Attractor>();
 
-    //    Attractors.Add(this);
-    //}
-
-    //void OnDisable()
-    //{
-    //    Attractors.Remove(this);
-    //}
 
     void Attract(GameObject objToAttract)
     {
@@ -48,11 +39,22 @@ public class Gravity : MonoBehaviour
         if (distance == 0f)
             return;
 
-        //5 is a hardcoded mass for the celestial body atm
-        float forceMagnitude = G * (rb.mass * 1f) / Mathf.Pow(distance, 2);
-        force = direction.normalized * forceMagnitude * -1f;
+        float mass = 2f;
+        float forceMagnitude = G * (rb.mass * mass) / Mathf.Pow(distance, 2);
 
-        //rb.AddForce(force);
+        if (forceMagnitude > 10f)
+        {
+            forceMagnitude = 10f;
+        }
+
+        force = direction.normalized * forceMagnitude * -1f;
+        rb.AddForce(force);
+        Debug.DrawLine(transform.position, force + shipPos, Color.cyan);
+        if (forceMagnitude > 9f)
+        {
+            Debug.Log(forceMagnitude);
+        }
+           
     }
 
 }
